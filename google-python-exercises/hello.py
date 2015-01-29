@@ -22,8 +22,8 @@ import sys
 
 def Cat(filename):
   f = open (filename, 'rU')
-  for line in f:
-    print(line, end='')
+  text = f.read()
+  print(text)
   f.close()
 
 # Define a main() function that prints a little greeting.

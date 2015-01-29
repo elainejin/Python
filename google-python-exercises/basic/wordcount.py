@@ -41,7 +41,35 @@ import sys
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
+def print_words(filename):
+  d = Cat(filename)
+  for key in sorted(d.keys()):
+    print(key + ': ' + str(d[key]))
+  return 
+
+
+def get_count(tuple):
+  return tuple[1]
+
+def print_top(filename):
+  d = Cat(filename)
+  list = sorted(d.items(), key=get_count, reverse=True)
+  for item in list[:20]:
+    print(item[0] + ': '+ str(item[1]))
+  
 # You could write a helper utility function that reads a file
+def Cat(filename):
+  f = open(filename)
+  txt = f.read().split()
+  f.close()
+  d = {}
+  for word in txt:
+    if word not in d.keys():
+      d[word] = 1
+    else:
+      d[word] += 1
+  return d
+
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
@@ -51,7 +79,7 @@ import sys
 # calls the print_words() and print_top() functions which you must define.
 def main():
   if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
+    print ('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
 
   option = sys.argv[1]
@@ -61,7 +89,7 @@ def main():
   elif option == '--topcount':
     print_top(filename)
   else:
-    print 'unknown option: ' + option
+    print ('unknown option: ' + option)
     sys.exit(1)
 
 if __name__ == '__main__':
