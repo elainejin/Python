@@ -25,7 +25,14 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
-  
+  u = urllib.urlopen(filename)
+  text = u.read()
+  match = re.findall('GET\s(\S+)\s', text)
+  result = []
+  for item in match:
+    if not item in result and 'puzzle' in item:
+      result.append('http://code.google.com'+item)
+  return sorted(result)
 
 def download_images(img_urls, dest_dir):
   """Given the urls already in the correct order, downloads
@@ -36,7 +43,20 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
+  if not os.path.exists(dest_dir):
+    os.mkdir(dest_dir)
+  index = file(os.path.join(dest_dir, 'index.html'),'w')
+  index.write('<html>\n<body>\n')
   
+  for i in range(1,len(img_urls)):  
+    print 'Retriving...', img_urls[i-1]
+    filename = 'img'+str(i-1)
+    index.write('<img src="%s"/>' % (filename,))
+    urllib.urlretrieve(img_urls[i-1], os.path.join(dest_dir,filename))
+
+  index.write('\n</body>\n</html>')
+  index.close()
+
 
 def main():
   args = sys.argv[1:]
